@@ -1,0 +1,25 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "+SLRfCdnZzt59tTsNUp6ie39zjo=",
+			"path": "github.com/xeipuuv/gojsonpointer",
+			"revision": "4e3ac2762d5f479393488629ee9370b50873b3a6",
+			"revisionTime": "2018-01-27T04:07:02Z"
+		},
+		{
+			"checksumSHA1": "cjCjdAbLpKV1bxMpMRzC5Fn4R34=",
+			"path": "github.com/xeipuuv/gojsonreference",
+			"revision": "bd5ef7bd5415a7ac448318e64f11a24cd21e594b",
+			"revisionTime": "2018-01-27T04:06:03Z"
+		},
+		{
+			"checksumSHA1": "iBtaaPC5g5BHnPbfIjfkoPojotc=",
+			"path": "github.com/xeipuuv/gojsonschema",
+			"revision": "f971f3cd73b2899de6923801c147f075263e0c50",
+			"revisionTime": "2018-12-19T16:01:44Z"
+		}
+	],
+	"rootPath": "github.com/aschmidt75/precious_cargo_shipments"
+}

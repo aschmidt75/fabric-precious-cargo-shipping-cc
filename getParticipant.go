@@ -6,6 +6,25 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"github.com/xeipuuv/gojsonschema"
+)
+
+var (
+	getIndividualParticipantSchema string = `
+{
+	"$id": "PreciousCargoShippping:getIndividualParticipantSchema",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "string",
+			"description": "ID of IndividualParticipant",
+			"pattern": "^([0-9]{4,32})$"
+		}
+	},
+	"required": [ "id" ]
+}
+`
+	getIndividualParticipantSchemaLoader = gojsonschema.NewStringLoader(getIndividualParticipantSchema)
 )
 
 // Retrieves Participant data by Id, returns data structure
@@ -32,8 +51,22 @@ func (inv *getIndividualParticipantInvocation) checkParseArguments(stub shim.Cha
 		return errors.New("Expecting JSON input as first param")
 	}
 
+	result, err := gojsonschema.Validate(getIndividualParticipantSchemaLoader,
+		gojsonschema.NewStringLoader(args[0]))
+	if err != nil {
+		logger.Println(err)
+		return errors.New("Error parsing/validating JSON arg")
+	}
+	if !result.Valid() {
+		logger.Printf("JSON input not valid:\n")
+		for _, err := range result.Errors() {
+			logger.Printf("- %s\n", err)
+		}
+		return errors.New("JSON not valid according to schema")
+	}
+
 	inv.arg = getIndividualParticipantArg{}
-	err := json.Unmarshal([]byte(args[0]), &inv.arg)
+	err = json.Unmarshal([]byte(args[0]), &inv.arg)
 	if err != nil {
 		logger.Printf("Error unmarshaling JSON: %s", err)
 		return errors.New("Invalid JSON")

@@ -24,6 +24,7 @@ type IndividualParticipant struct {
 
 type ShipmentCo struct {
 	Participant
+	Address string `json:"address"`
 }
 
 type Asset struct {
@@ -33,22 +34,21 @@ type Asset struct {
 type Shipment struct {
 	Asset
 
-	Shipper ShipmentCo            `json:"by"`
-	From    IndividualParticipant `json:"from"`
-	To      IndividualParticipant `json:"to"`
+	ShipperId string `json:"by"`
+	FromId    string `json:"from"`
+	ToId      string `json:"to"`
 
 	Status string `json:"status"` // one of: submitted, intransit, delivered
 
 	SubmittedAt time.Time `json:"submittime"`
-	DelivererAt time.Time `json:"delivertime"`
+	DelivererAt time.Time `json:"delivertime,omitempty"`
 }
 
 type TrackingDataPoint struct {
-	Asset
-
-	ShipmentID  Id      `json:"shipmentId"`
-	Latitude    float64 `json:"lat"`
-	Longitude   float64 `json:"lng"`
-	Temperature float32 `json:"temp"`
-	Humidity    float32 `json:"hum"`
+	ShipmentID  Id        `json:"shipmentId"`
+	At          time.Time `json:"at"`
+	Latitude    float64   `json:"lat"`
+	Longitude   float64   `json:"lng"`
+	Temperature float32   `json:"temp"`
+	Humidity    float32   `json:"hum"`
 }

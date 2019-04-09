@@ -17,23 +17,6 @@ var (
 	ns     = "sample.PreciousCargoChaincode"
 )
 
-type InvocationHandler interface {
-	/**
-	 * extracts arguments from the stub and checks them
-	 */
-	checkParseArguments(stub shim.ChaincodeStubInterface) error
-
-	/**
-	 * runs the chaincode
-	 */
-	process(stub shim.ChaincodeStubInterface) error
-
-	/**
-	 * returns result
-	 */
-	getResponse(stub shim.ChaincodeStubInterface) interface{}
-}
-
 type PreciousCargoChaincode struct {
 	// map function names to function implementation types
 	handlers map[string]reflect.Type
@@ -59,7 +42,7 @@ func (cci *PreciousCargoChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.R
 			// from invType as reflect.Type, create a new object and
 			// cast its interface to InvocationHandler.
 			inv := reflect.New(invType).Interface().(InvocationHandler)
-			logger.Printf("invHandler(%x)=%#v\n", inv, inv)
+			logger.Printf("invHandler(%X)=%+v\n", inv, inv)
 			if err := inv.checkParseArguments(stub); err != nil {
 				return shim.Error(err.Error())
 			}
@@ -85,8 +68,10 @@ func main() {
 	// add all functions as InvocationHandlers
 	cc.handlers = make(map[string]reflect.Type)
 	cc.handlers["submitShipment"] = reflect.TypeOf((*submitShipmentInvocation)(nil)).Elem()
+	cc.handlers["getShipment"] = reflect.TypeOf((*getShipmentInvocation)(nil)).Elem()
 	cc.handlers["registerIndividualParticipant"] = reflect.TypeOf((*registerIndividualParticipantInvocation)(nil)).Elem()
 	cc.handlers["getIndividualParticipant"] = reflect.TypeOf((*getIndividualParticipantInvocation)(nil)).Elem()
+	cc.handlers["registerShipmentCo"] = reflect.TypeOf((*registerShipmentCoInvocation)(nil)).Elem()
 
 	err := shim.Start(cc)
 	if err != nil {
