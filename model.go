@@ -38,7 +38,7 @@ type Shipment struct {
 	FromId    string `json:"from"`
 	ToId      string `json:"to"`
 
-	Status string `json:"status"` // one of: submitted, intransit, delivered
+	Status string `json:"status"`
 
 	SubmittedAt time.Time `json:"submittime"`
 	DelivererAt time.Time `json:"delivertime,omitempty"`

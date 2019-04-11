@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"reflect"
@@ -13,8 +14,8 @@ import (
 )
 
 var (
-	logger = log.New(os.Stdout, "PreciousCargoChaincode: ", log.Ldate|log.Ltime|log.Lmicroseconds)
 	ns     = "sample.PreciousCargoChaincode"
+	logger = log.New(os.Stdout, fmt.Sprintf("%s: ", ns), log.Ldate|log.Ltime|log.Lmicroseconds)
 )
 
 type PreciousCargoChaincode struct {
@@ -42,17 +43,19 @@ func (cci *PreciousCargoChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.R
 			// from invType as reflect.Type, create a new object and
 			// cast its interface to InvocationHandler.
 			inv := reflect.New(invType).Interface().(InvocationHandler)
-			logger.Printf("invHandler(%X)=%+v\n", inv, inv)
+			// let it check its input
 			if err := inv.checkParseArguments(stub); err != nil {
 				return shim.Error(err.Error())
 			}
+			// run the transaction
 			if err := inv.process(stub); err != nil {
 				return shim.Error(err.Error())
 			}
+			// send out the response
 			r, err := json.Marshal(inv.getResponse(stub))
 			if err != nil {
 				logger.Println(err)
-				return shim.Error("Internal JSON marshal error.")
+				return shim.Error("Internal JSON marshal error (response).")
 			}
 			return shim.Success([]byte(r))
 		}
@@ -64,15 +67,16 @@ func (cci *PreciousCargoChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.R
 func main() {
 	logger.Println("Instantiating chaincode.")
 
-	cc := new(PreciousCargoChaincode)
-	// add all functions as InvocationHandlers
-	cc.handlers = make(map[string]reflect.Type)
-	cc.handlers["submitShipment"] = reflect.TypeOf((*submitShipmentInvocation)(nil)).Elem()
-	cc.handlers["getShipment"] = reflect.TypeOf((*getShipmentInvocation)(nil)).Elem()
-	cc.handlers["registerIndividualParticipant"] = reflect.TypeOf((*registerIndividualParticipantInvocation)(nil)).Elem()
-	cc.handlers["getIndividualParticipant"] = reflect.TypeOf((*getIndividualParticipantInvocation)(nil)).Elem()
-	cc.handlers["registerShipmentCo"] = reflect.TypeOf((*registerShipmentCoInvocation)(nil)).Elem()
-
+	cc := &PreciousCargoChaincode{
+		// add all functions as InvocationHandlers
+		handlers: map[string]reflect.Type{
+			"submitShipment":                reflect.TypeOf((*submitShipmentInvocation)(nil)).Elem(),
+			"getShipment":                   reflect.TypeOf((*getShipmentInvocation)(nil)).Elem(),
+			"registerIndividualParticipant": reflect.TypeOf((*registerIndividualParticipantInvocation)(nil)).Elem(),
+			"getIndividualParticipant":      reflect.TypeOf((*getIndividualParticipantInvocation)(nil)).Elem(),
+			"registerShipmentCo":            reflect.TypeOf((*registerShipmentCoInvocation)(nil)).Elem(),
+		},
+	}
 	err := shim.Start(cc)
 	if err != nil {
 		logger.Fatalf("Error starting chaincode: %s", err)
