@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	getShipmentSchema string = `
+	getShipmentSchema = `
  {
 	 "$id": "PreciousCargoShippping:getShipmentSchema",
 	 "type": "object",
@@ -47,7 +47,7 @@ func (inv *getShipmentInvocation) checkParseArguments(stub shim.ChaincodeStubInt
 	_, args := stub.GetFunctionAndParameters()
 
 	if len(args) != 1 {
-		return errors.New("Expecting JSON input as first param")
+		return errors.New("expecting JSON input as first param")
 	}
 
 	sl := gojsonschema.NewStringLoader(getShipmentSchema)
@@ -55,20 +55,20 @@ func (inv *getShipmentInvocation) checkParseArguments(stub shim.ChaincodeStubInt
 
 	result, err := gojsonschema.Validate(sl, dl)
 	if err != nil {
-		return errors.New("Error parsing/validating JSON arg")
+		return errors.New("error parsing/validating JSON arg")
 	}
 	if !result.Valid() {
 		logger.Printf("JSON input not valid:\n")
 		for _, err := range result.Errors() {
 			logger.Printf("- %s\n", err)
 		}
-		return errors.New("JSON not valid according to schema")
+		return errors.New("json not valid according to schema")
 	}
 
 	inv.arg = getShipmentArg{}
 	err = json.Unmarshal([]byte(args[0]), &inv.arg)
 	if err != nil {
-		logger.Printf("Error unmarshaling JSON: %s", err)
+		logger.Printf("error unmarshaling JSON: %s", err)
 		return errors.New("Invalid JSON")
 	}
 	return nil

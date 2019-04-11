@@ -81,14 +81,14 @@ func (inv *getIndividualParticipantInvocation) process(stub shim.ChaincodeStubIn
 	ck, err := stub.CreateCompositeKey(ns, []string{".", "IndividualParticipant", "#", inv.arg.Id})
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Internal error generating composite key (1).")
+		return errors.New("internal error generating composite key (1).")
 	}
 	logger.Printf("key=%s\n", ck)
 
 	data, err := stub.GetState(ck)
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Internal error reading from world state.")
+		return errors.New("internal error reading from world state.")
 	}
 	if data == nil {
 		logger.Println("Nothing found for given key.")
@@ -100,7 +100,7 @@ func (inv *getIndividualParticipantInvocation) process(stub shim.ChaincodeStubIn
 	err = json.Unmarshal(data, &inv.res.Participant)
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Internal error reading from world state (2).")
+		return errors.New("internal error reading from world state (2).")
 	}
 	logger.Printf("Found %#v\n", inv.res.Participant)
 

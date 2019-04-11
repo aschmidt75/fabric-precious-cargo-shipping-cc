@@ -68,7 +68,7 @@ func (inv *registerIndividualParticipantInvocation) process(stub shim.ChaincodeS
 	s, err := newId(stub, "IndividualParticipant")
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Internal error generating index key.")
+		return errors.New("internal error generating index key")
 	}
 	inv.idStr = s
 
@@ -87,7 +87,7 @@ func (inv *registerIndividualParticipantInvocation) process(stub shim.ChaincodeS
 	ck, err := stub.CreateCompositeKey(ns, []string{".", "IndividualParticipant", "#", inv.idStr})
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Internal error generating composite key (2).")
+		return errors.New("internal error generating composite key (2)")
 	}
 	logger.Printf("key=%s\n", ck)
 
@@ -95,13 +95,13 @@ func (inv *registerIndividualParticipantInvocation) process(stub shim.ChaincodeS
 	data, err := json.Marshal(p)
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Internal JSON marshal error (1).")
+		return errors.New("internal JSON marshal error (1)")
 	}
 	// ... save to world state
 	err = stub.PutState(ck, []byte(data))
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Internal error writing world state.")
+		return errors.New("internal error writing world state")
 	}
 	logger.Printf("PutState to key=%s, data=%#v\n", ck, p)
 
