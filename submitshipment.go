@@ -35,7 +35,7 @@ func (inv *submitShipmentInvocation) checkParseArguments(stub shim.ChaincodeStub
 	_, args := stub.GetFunctionAndParameters()
 
 	if len(args) != 1 {
-		return errors.New("Expecting JSON input as first param")
+		return errors.New("expecting JSON input as first param")
 	}
 
 	inv.arg = submitShipmentArg{}
@@ -50,26 +50,26 @@ func (inv *submitShipmentInvocation) checkParseArguments(stub shim.ChaincodeStub
 	k, _, err = shipmentCoRegistry().get(stub, inv.arg.Shipper)
 	if err != nil {
 		logger.Println(err)
-		return errors.New("Invalid shipper argument: Not found.")
+		return errors.New("invalid shipper argument: Not found")
 	}
 	inv.shipperKey = k
 
 	k, _, err = individualParticipantRegistry().get(stub, inv.arg.From)
 	if err != nil {
-		return errors.New("Invalid from argument: Not found.")
+		return errors.New("invalid from argument: Not found")
 	}
 	inv.fromKey = k
 
 	k, _, err = individualParticipantRegistry().get(stub, inv.arg.To)
 	if err != nil {
-		return errors.New("Invalid to argument: Not found.")
+		return errors.New("invalid to argument: Not found")
 	}
 	inv.toKey = k
 
 	// parse and check time
 	inv.submittedAtParsed, err = time.Parse(time.RFC3339, inv.arg.SubmittedAt)
 	if err != nil {
-		return errors.New("Invalid submittedAt argument: Not parseable, please provide in RFC3339, e.g. 2006-01-02T15:04:05Z.")
+		return errors.New("invalid submittedAt argument: Not parseable, please provide in RFC3339, e.g. 2006-01-02T15:04:05Z")
 	}
 	logger.Printf("Parsed submittedAt=%s\n", inv.submittedAtParsed)
 
@@ -92,7 +92,7 @@ func (inv *submitShipmentInvocation) process(stub shim.ChaincodeStubInterface) e
 		SubmittedAt: inv.submittedAtParsed,
 	})
 	if err != nil {
-		return errors.New("Internal error writing world state.")
+		return errors.New("internal error writing world state")
 	}
 	inv.res = submitShipmentResult{
 		Id: key,

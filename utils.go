@@ -12,6 +12,8 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
+// InvocationHandler is a generic interface for wrapper a
+// single chaincode transaction.
 type InvocationHandler interface {
 	/**
 	 * extracts arguments from the stub and checks them
@@ -36,7 +38,7 @@ func newId(stub shim.ChaincodeStubInterface, indexName string) (string, error) {
 		return "", err
 	}
 
-	var lastIndex uint64 = 0
+	var lastIndex uint64
 	lastIndexBytes, err := stub.GetState(ckIndex)
 	if err != nil {
 		return "", err
@@ -92,24 +94,24 @@ func (r registry) create(stub shim.ChaincodeStubInterface, item interface{}) (st
 	idStr, err := newId(stub, r.typeStr)
 	if err != nil {
 		logger.Println(err)
-		return "", errors.New("Internal error generating index key.")
+		return "", errors.New("internal error generating index key")
 	}
 	ck, err := getShipmentKey(stub, idStr)
 	if err != nil {
 		logger.Println(err)
-		return "", errors.New("Internal error generating composite key.")
+		return "", errors.New("internal error generating composite key")
 	}
 	logger.Printf("key=%s\n", ck)
 
 	data, err := json.Marshal(&item)
 	if err != nil {
 		logger.Println(err)
-		return "", errors.New("Internal JSON marshal error.")
+		return "", errors.New("internal JSON marshal error")
 	}
 	err = stub.PutState(ck, []byte(data))
 	if err != nil {
 		logger.Println(err)
-		return "", errors.New("Internal error writing world state.")
+		return "", errors.New("internal error writing world state")
 	}
 	logger.Printf("PutState to key=%s, data=%#v\n", ck, item)
 
@@ -124,13 +126,13 @@ func (r registry) get(stub shim.ChaincodeStubInterface, id string) (string, inte
 	data, err := stub.GetState(ck)
 	if err != nil {
 		logger.Println(err)
-		return "", nil, errors.New("Internal error reading from world state (1).")
+		return "", nil, errors.New("internal error reading from world state (1)")
 	}
 	res := reflect.New(r.typeRT)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		logger.Println(err)
-		return "", nil, errors.New("Internal error reading from world state (2).")
+		return "", nil, errors.New("internal error reading from world state (2)")
 	}
 	logger.Printf("Found value=%#v for key=%s\n", res, id)
 
@@ -188,13 +190,13 @@ func getIndividualParticipant(stub shim.ChaincodeStubInterface, id string) (stri
 	data, err := stub.GetState(ck)
 	if err != nil {
 		logger.Println(err)
-		return "", nil, errors.New("Internal error reading from world state (1).")
+		return "", nil, errors.New("internal error reading from world state (1)")
 	}
 	res := &IndividualParticipant{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		logger.Println(err)
-		return "", nil, errors.New("Internal error reading from world state (2).")
+		return "", nil, errors.New("internal error reading from world state (2)")
 	}
 	logger.Printf("Found %#v\n", res)
 
@@ -209,13 +211,13 @@ func getShipmentCo(stub shim.ChaincodeStubInterface, id string) (string, *Shipme
 	data, err := stub.GetState(ck)
 	if err != nil {
 		logger.Println(err)
-		return "", nil, errors.New("Internal error reading from world state (1).")
+		return "", nil, errors.New("internal error reading from world state (1)")
 	}
 	res := &ShipmentCo{}
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		logger.Println(err)
-		return "", nil, errors.New("Internal error reading from world state (2).")
+		return "", nil, errors.New("internal error reading from world state (2)")
 	}
 	logger.Printf("Found %#v\n", res)
 

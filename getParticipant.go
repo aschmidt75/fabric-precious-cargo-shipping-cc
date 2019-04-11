@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	getIndividualParticipantSchema string = `
+	getIndividualParticipantSchema = `
 {
 	"$id": "PreciousCargoShippping:getIndividualParticipantSchema",
 	"type": "object",

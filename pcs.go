@@ -18,11 +18,13 @@ var (
 	logger = log.New(os.Stdout, fmt.Sprintf("%s: ", ns), log.Ldate|log.Ltime|log.Lmicroseconds)
 )
 
+// PreciousCargoChaincode is the Chaincode wrapper for PreciousCargoShipment
 type PreciousCargoChaincode struct {
 	// map function names to function implementation types
 	handlers map[string]reflect.Type
 }
 
+// Init initializes chaincode
 func (cci *PreciousCargoChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	logger.Println("enter Init")
 
@@ -31,6 +33,7 @@ func (cci *PreciousCargoChaincode) Init(stub shim.ChaincodeStubInterface) pb.Res
 	return shim.Success(nil)
 }
 
+// Invoke a chaincode function according to function namen and handlers.
 func (cci *PreciousCargoChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	logger.Println("enter Invoke")
 
@@ -68,7 +71,7 @@ func main() {
 	logger.Println("Instantiating chaincode.")
 
 	cc := &PreciousCargoChaincode{
-		// add all functions as InvocationHandlers
+		// all functions as InvocationHandlers
 		handlers: map[string]reflect.Type{
 			"submitShipment":                reflect.TypeOf((*submitShipmentInvocation)(nil)).Elem(),
 			"getShipment":                   reflect.TypeOf((*getShipmentInvocation)(nil)).Elem(),
