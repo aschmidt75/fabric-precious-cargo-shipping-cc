@@ -8,14 +8,14 @@ import (
 
 // World State/Ledger data structs
 
-// Id is a generic identifier
-type Id struct {
-	Id string `json:"id"`
+// ID is a generic identifier
+type ID struct {
+	ID string `json:"id"`
 }
 
 // Participant is a simple Participant identified by Id and a name
 type Participant struct {
-	Id
+	ID
 	Name string `json:"name"`
 }
 
@@ -33,7 +33,7 @@ type ShipmentCo struct {
 
 // Asset is identified by Id
 type Asset struct {
-	Id
+	ID
 }
 
 // Shipment combines Shipper, From and To Participants and
@@ -41,9 +41,9 @@ type Asset struct {
 type Shipment struct {
 	Asset
 
-	ShipperId string `json:"by"`
-	FromId    string `json:"from"`
-	ToId      string `json:"to"`
+	ShipperID string `json:"by"`
+	FromID    string `json:"from"`
+	ToID      string `json:"to"`
 
 	Status string `json:"status"`
 
@@ -54,7 +54,7 @@ type Shipment struct {
 // TrackingDataPoint combines a location and environmental
 // parameters for a shipment, at a point in time.
 type TrackingDataPoint struct {
-	ShipmentID  Id        `json:"shipmentId"`
+	ShipmentID  ID        `json:"shipmentId"`
 	At          time.Time `json:"at"`
 	Latitude    float64   `json:"lat"`
 	Longitude   float64   `json:"lng"`

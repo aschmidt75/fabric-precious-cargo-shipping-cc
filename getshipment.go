@@ -28,7 +28,7 @@ var (
 
 // Retrieves Participant data by Id, returns data structure
 type getShipmentArg struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 // Returns ID of shipment
@@ -83,7 +83,7 @@ func (inv *getShipmentInvocation) process(stub shim.ChaincodeStubInterface) erro
 		typeRT:  reflect.TypeOf(&Shipment{}),
 	}
 
-	_, x, err := r.get(stub, inv.arg.Id)
+	_, x, err := r.get(stub, inv.arg.ID)
 	inv.res = x.(getShipmentResult)
 
 	return err

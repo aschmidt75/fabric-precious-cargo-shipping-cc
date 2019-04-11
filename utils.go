@@ -32,7 +32,7 @@ type InvocationHandler interface {
 	getResponse(stub shim.ChaincodeStubInterface) interface{}
 }
 
-func newId(stub shim.ChaincodeStubInterface, indexName string) (string, error) {
+func newID(stub shim.ChaincodeStubInterface, indexName string) (string, error) {
 	ckIndex, err := stub.CreateCompositeKey(ns, []string{".", indexName, ".", "index"})
 	if err != nil {
 		return "", err
@@ -91,7 +91,7 @@ func (r registry) key(stub shim.ChaincodeStubInterface, id string) (string, erro
 }
 
 func (r registry) create(stub shim.ChaincodeStubInterface, item interface{}) (string, error) {
-	idStr, err := newId(stub, r.typeStr)
+	idStr, err := newID(stub, r.typeStr)
 	if err != nil {
 		logger.Println(err)
 		return "", errors.New("internal error generating index key")

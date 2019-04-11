@@ -16,7 +16,7 @@ type registerShipmentCoArg struct {
 
 // Returns ID of shipment
 type registerShipmentCoResult struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 type registerShipmentCoInvocation struct {
@@ -46,7 +46,7 @@ func (inv *registerShipmentCoInvocation) process(stub shim.ChaincodeStubInterfac
 	logger.Println("enter registerShipmentCo.process")
 	logger.Printf("arg=%#v\n", inv.arg)
 
-	idStr, err := newId(stub, "ShipmentCo")
+	idStr, err := newID(stub, "ShipmentCo")
 	if err != nil {
 		logger.Println(err)
 		return errors.New("internal error generating index key")
@@ -54,8 +54,8 @@ func (inv *registerShipmentCoInvocation) process(stub shim.ChaincodeStubInterfac
 
 	p := ShipmentCo{
 		Participant: Participant{
-			Id: Id{
-				Id: idStr,
+			ID: ID{
+				ID: idStr,
 			},
 			Name: inv.arg.Name,
 		},
@@ -82,7 +82,7 @@ func (inv *registerShipmentCoInvocation) process(stub shim.ChaincodeStubInterfac
 	logger.Printf("PutState to key=%s, data=%#v\n", ck, p)
 
 	inv.res = registerShipmentCoResult{
-		Id: idStr,
+		ID: idStr,
 	}
 
 	return nil

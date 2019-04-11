@@ -29,7 +29,7 @@ var (
 
 // Retrieves Participant data by Id, returns data structure
 type getIndividualParticipantArg struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 // Returns ID of shipment
@@ -78,21 +78,21 @@ func (inv *getIndividualParticipantInvocation) process(stub shim.ChaincodeStubIn
 	logger.Println("enter getIndividualParticipant.process")
 	logger.Printf("arg=%#v\n", inv.arg)
 
-	ck, err := stub.CreateCompositeKey(ns, []string{".", "IndividualParticipant", "#", inv.arg.Id})
+	ck, err := stub.CreateCompositeKey(ns, []string{".", "IndividualParticipant", "#", inv.arg.ID})
 	if err != nil {
 		logger.Println(err)
-		return errors.New("internal error generating composite key (1).")
+		return errors.New("internal error generating composite key (1)")
 	}
 	logger.Printf("key=%s\n", ck)
 
 	data, err := stub.GetState(ck)
 	if err != nil {
 		logger.Println(err)
-		return errors.New("internal error reading from world state.")
+		return errors.New("internal error reading from world state")
 	}
 	if data == nil {
 		logger.Println("Nothing found for given key.")
-		return errors.New("Not found")
+		return errors.New("not found")
 	}
 
 	// we could easily return data as-is (because its JSON), but to
@@ -100,7 +100,7 @@ func (inv *getIndividualParticipantInvocation) process(stub shim.ChaincodeStubIn
 	err = json.Unmarshal(data, &inv.res.Participant)
 	if err != nil {
 		logger.Println(err)
-		return errors.New("internal error reading from world state (2).")
+		return errors.New("internal error reading from world state (2)")
 	}
 	logger.Printf("Found %#v\n", inv.res.Participant)
 

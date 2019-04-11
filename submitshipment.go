@@ -19,7 +19,7 @@ type submitShipmentArg struct {
 
 // Returns ID of shipment
 type submitShipmentResult struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 type submitShipmentInvocation struct {
@@ -85,9 +85,9 @@ func (inv *submitShipmentInvocation) process(stub shim.ChaincodeStubInterface) e
 	logger.Printf("arg=%#v\n", inv.arg)
 
 	key, err := shipmentRegistry().create(stub, Shipment{
-		ShipperId:   inv.arg.Shipper,
-		FromId:      inv.arg.From,
-		ToId:        inv.arg.To,
+		ShipperID:   inv.arg.Shipper,
+		FromID:      inv.arg.From,
+		ToID:        inv.arg.To,
 		Status:      "submitted",
 		SubmittedAt: inv.submittedAtParsed,
 	})
@@ -95,7 +95,7 @@ func (inv *submitShipmentInvocation) process(stub shim.ChaincodeStubInterface) e
 		return errors.New("internal error writing world state")
 	}
 	inv.res = submitShipmentResult{
-		Id: key,
+		ID: key,
 	}
 
 	return nil

@@ -28,7 +28,7 @@ type registerIndividualParticipantArg struct {
 
 // Returns ID of shipment
 type registerIndividualParticipantResult struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
 // Unmarshal input argument, optionally check them
@@ -65,7 +65,7 @@ func (inv *registerIndividualParticipantInvocation) process(stub shim.ChaincodeS
 	logger.Printf("arg=%#v\n", inv.arg)
 
 	// Create an ID for the new participant
-	s, err := newId(stub, "IndividualParticipant")
+	s, err := newID(stub, "IndividualParticipant")
 	if err != nil {
 		logger.Println(err)
 		return errors.New("internal error generating index key")
@@ -75,8 +75,8 @@ func (inv *registerIndividualParticipantInvocation) process(stub shim.ChaincodeS
 	// create data item for world state update
 	p := IndividualParticipant{
 		Participant: Participant{
-			Id: Id{
-				Id: inv.idStr,
+			ID: ID{
+				ID: inv.idStr,
 			},
 			Name: inv.arg.Name,
 		},
@@ -107,7 +107,7 @@ func (inv *registerIndividualParticipantInvocation) process(stub shim.ChaincodeS
 
 	// return struct to client contains ID
 	inv.res = registerIndividualParticipantResult{
-		Id: inv.idStr,
+		ID: inv.idStr,
 	}
 
 	return nil
