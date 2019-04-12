@@ -1,8 +1,9 @@
-/**
- */
+// fabric-precious-cargo-shipping-cc is a sample chaincode for Hyperledger Fabric
+// Copyright (C) 2019 @aschmidt75
 package main
 
 import (
+	"reflect"
 	"time"
 )
 
@@ -60,4 +61,33 @@ type TrackingDataPoint struct {
 	Longitude   float64   `json:"lng"`
 	Temperature float32   `json:"temp"`
 	Humidity    float32   `json:"hum"`
+}
+
+// registries
+func trackingDataPointRegistry() registry {
+	return registry{
+		typeStr: "TrackingDataPoint",
+		typeRT:  reflect.TypeOf(&TrackingDataPoint{}),
+	}
+}
+
+func shipmentRegistry() registry {
+	return registry{
+		typeStr: "Shipment",
+		typeRT:  reflect.TypeOf(&Shipment{}),
+	}
+}
+
+func shipmentCoRegistry() registry {
+	return registry{
+		typeStr: "ShipmentCo",
+		typeRT:  reflect.TypeOf(&ShipmentCo{}),
+	}
+}
+
+func individualParticipantRegistry() registry {
+	return registry{
+		typeStr: "IndividualParticipant",
+		typeRT:  reflect.TypeOf(&IndividualParticipant{}),
+	}
 }

@@ -1,5 +1,18 @@
-/**
- */
+// fabric-precious-cargo-shipping-cc is a sample chaincode for Hyperledger Fabric
+// Copyright (C) 2019 @aschmidt75
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.package main
 package main
 
 import (
@@ -40,28 +53,25 @@ func (cci *PreciousCargoChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.R
 	function, args := stub.GetFunctionAndParameters()
 	logger.Printf("requested function=%s, with args=%#v", function, args)
 
-	// iterate through map of known functions
-	for key, invType := range cci.handlers {
-		if function == key {
-			// from invType as reflect.Type, create a new object and
-			// cast its interface to InvocationHandler.
-			inv := reflect.New(invType).Interface().(InvocationHandler)
-			// let it check its input
-			if err := inv.checkParseArguments(stub); err != nil {
-				return shim.Error(err.Error())
-			}
-			// run the transaction
-			if err := inv.process(stub); err != nil {
-				return shim.Error(err.Error())
-			}
-			// send out the response
-			r, err := json.Marshal(inv.getResponse(stub))
-			if err != nil {
-				logger.Println(err)
-				return shim.Error("Internal JSON marshal error (response).")
-			}
-			return shim.Success([]byte(r))
+	if invType, found := cci.handlers[function]; found {
+		// from invType as reflect.Type, create a new object and
+		// cast its interface to InvocationHandler.
+		inv := reflect.New(invType).Interface().(InvocationHandler)
+		// let it check its input
+		if err := inv.checkParseArguments(stub); err != nil {
+			return shim.Error(err.Error())
 		}
+		// run the transaction
+		if err := inv.process(stub); err != nil {
+			return shim.Error(err.Error())
+		}
+		// send out the response
+		r, err := json.Marshal(inv.getResponse(stub))
+		if err != nil {
+			logger.Println(err)
+			return shim.Error("Internal JSON marshal error (response).")
+		}
+		return shim.Success([]byte(r))
 	}
 
 	return shim.Error("Invalid function name.")

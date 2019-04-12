@@ -1,5 +1,5 @@
-/**
- */
+// fabric-precious-cargo-shipping-cc is a sample chaincode for Hyperledger Fabric
+// Copyright (C) 2019 @aschmidt75
 package main
 
 import (

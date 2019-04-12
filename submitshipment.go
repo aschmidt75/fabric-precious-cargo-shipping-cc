@@ -1,5 +1,5 @@
-/**
- */
+// fabric-precious-cargo-shipping-cc is a sample chaincode for Hyperledger Fabric
+// Copyright (C) 2019 @aschmidt75
 package main
 
 import (
@@ -23,10 +23,15 @@ type submitShipmentResult struct {
 }
 
 type submitShipmentInvocation struct {
-	arg                        submitShipmentArg
+	// input argument
+	arg submitShipmentArg
+
+	// intermediates
 	shipperKey, fromKey, toKey string
 	submittedAtParsed          time.Time
-	res                        submitShipmentResult
+
+	// result
+	res submitShipmentResult
 }
 
 func (inv *submitShipmentInvocation) checkParseArguments(stub shim.ChaincodeStubInterface) error {
