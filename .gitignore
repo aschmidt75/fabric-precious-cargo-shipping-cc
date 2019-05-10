@@ -12,3 +12,4 @@
 *.out
 
 BACKLOG.md
+*.code-workspace
